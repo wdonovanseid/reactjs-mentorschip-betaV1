@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useFirestore } from 'react-redux-firebase';
 
-// make sure to lock all inputs with patterns before putting into production
+// make sure to lock all inputs with patterns and titles before putting into production
 
 function ScholarshipForm(props) {
 
@@ -11,9 +11,11 @@ function ScholarshipForm(props) {
   const [EssayNumber, setEssayNumber] = useState(1);
   const [RecommendationNumber, setRecommendationNumber] = useState(1);
   const [PlantPlacementProtocol, setPlantPlacementProtocol] = useState("DROP");
-  const [ScholarshipAwardValue, setScholarshipAwardValue] = useState(0);
+  const [ScholarshipAwardValue, setScholarshipAwardValue] = useState(0.00);
   const [ScholarshipAwardDivisibility, setScholarshipAwardDivisibility] = useState("divide");
-  
+  const [ScholarshipDuration, setScholarshipDuration] = useState("1 Hour");
+  const [ScholarshipAwardLimit, setScholarshipAwardLimit] = useState("1-60perHour");
+  const [ScholarshipAwardLimitNumber, setScholarshipAwardLimitNumber] = useState(1);
   const [ER1Value, setER1Value] = useState(false);
   const [ER2Value, setER2Value] = useState(false);
   const [ER3Value, setER3Value] = useState(false);
@@ -44,21 +46,42 @@ function ScholarshipForm(props) {
 
   const firestore = useFirestore();
 
-  function calculateTotal(placType, awardVal, divis, ) {
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function calcAwardMax(strLim) {
+    switch(strLim) {
+      case "1-60perHour":
+        return 60;
+      case "1-24perDay":
+        return 24;
+      case "1-7perWeek":
+        return 7;
+      case "1-30perMonth":
+        return 30;
+      case "1-365perYear":
+        return 365;
+    }
+  }
+
+  function calculateTotal(placType, awardVal, divis, duration, limit, limNum) {
     if (placType === "DROP" || placType === "TAG") {
       if (divis === "divide") {
-        return awardVal/7;
+        return "$"+numberWithCommas(awardVal)+" divided over each application approved by you";
       } else {
-        return awardVal;
+        return "$"+numberWithCommas(awardVal)+" given to each application approved by you";
       }
     }
-
+    if (placType === "PLANT") {
+      return "$"+numberWithCommas(awardVal*limNum);
+    }
   }
 
   function handleAddScholarshipCardProposalToFireStore(e) {
     e.preventDefault();
     alert("proposal submitted!");
-    // props.onClickingReturnToMainMenu();
+    // props.onClickingReturnToMainMenu(); // all this function does is send user back to main menu after submitting
     let essayTopicQuestions = [e.target.essayTopicQuestion1.value];
     if (e.target.numberOfEssays.value > 1) {
       essayTopicQuestions.push(e.target.essayTopicQuestion2.value);
@@ -87,6 +110,8 @@ function ScholarshipForm(props) {
     }
 
     // this is where email verification or security stuff would go before following code is executed
+    // and/or this is where the page would switch over to some security questions
+    // i.e. What is your Grandmas middle name kinda stuff before executing the following code
 
     return firestore.collection('scholarshipCardProposal').add({
       mentorID: e.target.mentorID.value,
@@ -116,6 +141,8 @@ function ScholarshipForm(props) {
         scholarshipAwardValue: e.target.scholarshipAwardValue.value,
         scholarshipAwardValueDivisiblity: e.target.scholarshipAwardValueDivisiblity.value,
         scholarshipAwardLimit: e.target.scholarshipAwardLimit.value,
+        scholarshipAwardLimitNumber: e.target.scholarshipAwardLimitNumber.value,
+        scholarshipAwardAuto: e.target.scholarshipAwardAuto.value,
       },
       scholarshipDuration: e.target.scholarshipDuration.value,
       scholarshipKeyword: e.target.scholarshipKeyword.value,
@@ -454,6 +481,7 @@ function ScholarshipForm(props) {
           name="tagIMG"
           />
           {/* be extra careful with the safety procedures for this one */}
+          {/* also need to figure out how to make it so you can put up to 3 images */}
         </p>
         <p>Insert Tag Info
           <input
@@ -486,12 +514,12 @@ function ScholarshipForm(props) {
         <div>
         <p>Select Divisibility:
           <select name="scholarshipAwardValueDivisiblity" onChange={(e) => setScholarshipAwardDivisibility(e.target.value)}>
-            <option value="divide">Divide Total</option>
-            <option value="each">Each</option>
+            <option value="divide">Divide Total Award Value by Number of Applicant Awarded</option>
+            <option value="each">Each Applicant is awarded Scholarship Award Value</option>
           </select>
         </p>
         <p>Select Duration for this Scholarship Opportunity:
-          <select name="scholarshipDuration">
+          <select name="scholarshipDuration" onChange={(e) => setScholarshipDuration(e.target.value)}>
             <option value="1 Hour">1 Hour</option>
             <option value="1 Day">1 Day</option>
             <option value="1 Week">1 Week</option>
@@ -504,10 +532,10 @@ function ScholarshipForm(props) {
         <input type="hidden" name="scholarshipAwardValueDivisiblity" value=""></input>
         <input type="hidden" name="scholarshipDuration" value=""></input>
         </div>}
-        {PlacementType === "Plant" ?
+        {PlacementType === "PLANT" ?
         <div>
           <p>Choose Award Limits:
-            <select name="scholarshipAwardLimit">
+            <select name="scholarshipAwardLimit" onChange={(e) => setScholarshipAwardLimit(e.target.value)}>
               <option value="1-60perHour">1-60 Awards Per Hour</option>
               <option value="1-24perDay">1-24 Awards Per Day</option>
               <option value="1-7perWeek">1-7 Awards Per Week</option>
@@ -515,11 +543,33 @@ function ScholarshipForm(props) {
               <option value="1-365perYear">1-365 Awards Per Year</option>
             </select>
           </p>
+          <p>Number of Awards:
+            <input
+            type="number"
+            name="scholarshipAwardLimitNumber"
+            placeholder="1"
+            step="1"
+            min="1"
+            max={calcAwardMax(ScholarshipAwardLimit)}
+            onChange={(event) => setScholarshipAwardLimitNumber(event.target.value)}
+            />
+            {/* double check max setting on this, doesn't seem to be working */}
+          </p>
+          <p>Automatically Award:
+            <select name="scholarshipAwardAuto">
+              <option value={true}>YES</option>
+              <option value={false}>NO</option>
+            </select>
+          </p>
         </div>:
-        <input type="hidden" name="scholarshipAwardLimit" value=""></input>}
+        <div>
+        <input type="hidden" name="scholarshipAwardLimit" value=""></input>
+        <input type="hidden" name="scholarshipAwardLimitNumber" value=""></input>
+        <input type="hidden" name="scholarshipAwardAuto" value=""></input>
+        </div>}
         
-        <p>Total Expected Scholarship Awards Value: 
-          $ {calculateTotal(PlacementType, ScholarshipAwardValue, ScholarshipAwardDivisibility,)}
+        <p>Total Expected Scholarship Awards Value:
+          <b>{calculateTotal(PlacementType, ScholarshipAwardValue, ScholarshipAwardDivisibility, ScholarshipDuration, ScholarshipAwardLimit, ScholarshipAwardLimitNumber)}</b>
         </p>
 
         <p>Select the appropriate field relevant to the purpose of your scholarship application:
