@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+// this page can't currently be accessed
+// when registration and login get figured out,
+// a user should be able to access their own personal profile details if they've created one
+
 function ProfileDetail(props) {
   const { profile } = props;
   return (

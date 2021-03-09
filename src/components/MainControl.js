@@ -18,6 +18,10 @@ import ScholarshipSubmissions from './ScholarshipSubmissions.js';
 
 class MainControl extends React.Component {
 
+  // the following constructor and corresponding parts are just there for testing purposes
+  // when the register and account registration stuff get figured out, these kind of values would be taken
+  // and used in the sequential parts of the application
+  
   constructor() {
     super();
     this.state = {

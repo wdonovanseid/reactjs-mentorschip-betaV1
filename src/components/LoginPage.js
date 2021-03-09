@@ -1,5 +1,7 @@
 import React from "react";
 
+// rework this page after login and registration information gets figured out
+
 function LoginPage(props) {
   return (
     <React.Fragment>

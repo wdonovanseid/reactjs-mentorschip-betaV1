@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+// form for both creating and editing a users profile
+
 function ReusableForm(props) {
   return (
     <React.Fragment>

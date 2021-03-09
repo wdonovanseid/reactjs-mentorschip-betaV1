@@ -11,7 +11,7 @@ function NewProfileForm(props) {
   function handleAddProfileToFirestore(event) {
     event.preventDefault();
     alert("profile submitted!");
-    // props.onNewProfileCreation(); all this does is reverts back to main menu
+    // props.onNewProfileCreation(); // all this does is reverts back to main menu
     if (event.target.accountType.value === "Seeker") {
       return firestore.collection('profiles').add({
         accountType: event.target.accountType.value,

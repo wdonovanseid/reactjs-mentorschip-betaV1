@@ -1,16 +1,6 @@
 import React, {useState} from "react";
 
-// import { useSelector } from 'react-redux'
-// import { useFirestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase'
-
 function MainMenu(props) {
-
-  // useFirestoreConnect([
-  //   { collection: 'profiles',
-  //     doc: profileId } // find way to pass profileId in
-  // ]);
-  // const profiles = useSelector(state => state.firestore.ordered.profiles);
-  // if (isLoaded(profiles)) {
 
     return (
       <React.Fragment>
@@ -28,14 +18,6 @@ function MainMenu(props) {
         <button type="button" onClick={props.onClickingLogOff}>Log Off</button>
       </React.Fragment>
     );
-
-  // } else {
-  //   return (
-  //     <React.Fragment>
-  //       <h3>Loading...</h3>
-  //     </React.Fragment>
-  //   )
-  // }
 
 }
 
