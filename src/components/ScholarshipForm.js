@@ -44,10 +44,16 @@ function ScholarshipForm(props) {
   const [AQ5Value, setAQ5Value] = useState(false);
   const [AQ6Value, setAQ6Value] = useState(false);
   const [AQ7Value, setAQ7Value] = useState(false);
-  const [ESP1Value, setESP1Value] = useState(false);
-  const [ESP2Value, setESP2Value] = useState(false);
-  const [EnrollTime, setEnrollTime] = useState("fullTime");
-  const [StartCollegeTime, setStartCollegeTime] = useState("fall");
+  const [ESSPE1Value, setESSPE1Value] = useState(false);
+  const [ESSPE2Value, setESSPE2Value] = useState(false);
+  const [ESSPE3Value, setESSPE3Value] = useState(false);
+  const [ESSPE4Value, setESSPE4Value] = useState(false);
+  const [ESSPE5Value, setESSPE5Value] = useState(false);
+  const [ESSPSC1Value, setESSPSC1Value] = useState(false);
+  const [ESSPSC2Value, setESSPSC2Value] = useState(false);
+  const [ESSPSC3Value, setESSPSC3Value] = useState(false);
+  const [ESSPSC4Value, setESSPSC4Value] = useState(false);
+  const [ESSPSC5Value, setESSPSC5Value] = useState(false);
   const [ESSChosenInstitute, setESSChosenInstitute] = useState("prove");
   const [ProveValue, setProveValue] = useState("accreditation");
   const [ProvideValue, setProvideValue] = useState("certificateOfCompletion");
@@ -194,12 +200,22 @@ function ScholarshipForm(props) {
         otherInput: e.target.aq7Input.value,
       },
       eligibleStudentPlan: {
-        enroll: ESP1Value,
-        enrollTime: e.target.enrollTime.value,
-        enrollTimeOtherInput: e.target.enrollTimeOtherInput.value,
-        startCollege: ESP2Value,
-        startCollegeTime: e.target.startCollegeTime.value,
-        startCollegeTimeOtherInput: e.target.startCollegeTimeOtherInput.value,
+        enroll: {
+          fullTime: ESSPE1Value,
+          partTime: ESSPE2Value,
+          coOp: ESSPE3Value,
+          flexSchedule: ESSPE4Value,
+          other: ESSPE5Value,
+          enrollTimeOtherInput: e.target.enrollTimeOtherInput.value,
+        },
+        startCollege: {
+          fall: ESSPSC1Value,
+          winter: ESSPSC2Value,
+          spring: ESSPSC3Value,
+          summer: ESSPSC4Value,
+          other: ESSPSC5Value,
+          startCollegeTimeOtherInput: e.target.startCollegeTimeOtherInput.value,
+        },
       },
       eligibleStudentChosenInstituteProgram: {
         essChosenInstitute: e.target.ESSChosenInstitute.value,
@@ -701,46 +717,40 @@ function ScholarshipForm(props) {
         </p>
         <p>Eligible Student Seekers Must Plan to ...
           <ul>
-            <li><input type="checkbox" name="ESP1" onChange={() => setESP1Value(!ESP1Value)}></input>Enroll</li>
-            {ESP1Value === true?
-            <select name="enrollTime" onChange={e => setEnrollTime(e.target.value)}>
-              <option value="fullTime">Full Time</option>
-              <option value="partTime">Part Time</option>
-              <option value="coOP">Co-OP</option>
-              <option value="flexSchedule">Flex Schedule</option>
-              <option value="other">Other</option>
-            </select>:
-            <input type="hidden" name="enrollTime" value=""></input>}
-            {ESP1Value === true && EnrollTime === "other" ?
-            <p>Insert Text Here:
-              <input
-              type="text"
-              name="enrollTimeOtherInput"
-              defaultValue=""
-              maxLength={25}
-              />
-            </p>:
-            <input type="hidden" name="enrollTimeOtherInput" value=""></input>}
-            <li><input type="checkbox" name="ESP2" onChange={() => setESP2Value(!ESP2Value)}></input>Start Colleget</li>
-            {ESP2Value === true ?
-            <select name="startCollegeTime" onChange={e => setStartCollegeTime(e.target.value)}>
-              <option value="fall">Fall</option>
-              <option value="winter">Winter</option>
-              <option value="spring">Spring</option>
-              <option value="summer">Summer</option>
-              <option value="other">Other</option>
-            </select>:
-            <input type="hidden" name="startCollegeTime" value=""></input>}
-            {ESP2Value === true && StartCollegeTime === "other" ?
-            <p>Insert Text Here:
-              <input
-              type="text"
-              name="startCollegeTimeOtherInput"
-              defaultValue=""
-              maxLength={25}
-              />
-            </p>:
-            <input type="hidden" name="startCollegeTimeOtherInput" value=""></input>}
+            <p>Enroll
+              <li><input type="checkbox" name="ESSPE1" onChange={() => setESSPE1Value(!ESSPE1Value)}></input>Full Time</li>
+              <li><input type="checkbox" name="ESSPE2" onChange={() => setESSPE2Value(!ESSPE2Value)}></input>Part Time</li>
+              <li><input type="checkbox" name="ESSPE3" onChange={() => setESSPE3Value(!ESSPE3Value)}></input>Co-Op</li>
+              <li><input type="checkbox" name="ESSPE4" onChange={() => setESSPE4Value(!ESSPE4Value)}></input>Flex Schedule</li>
+              <li><input type="checkbox" name="ESSPE5" onChange={() => setESSPE5Value(!ESSPE5Value)}></input>Other</li>
+              {ESSPE5Value === true ?
+              <p>Insert Text Here:
+                <input
+                type="text"
+                name="enrollTimeOtherInput"
+                defaultValue=""
+                maxLength={25}
+                />
+              </p>:
+              <input type="hidden" name="enrollTimeOtherInput" value=""></input>}
+            </p>
+            <p>Start College
+              <li><input type="checkbox" name="ESSPSC1" onChange={() => setESSPSC1Value(!ESSPSC1Value)}></input>Fall</li>
+              <li><input type="checkbox" name="ESSPSC2" onChange={() => setESSPSC2Value(!ESSPSC2Value)}></input>Winter</li>
+              <li><input type="checkbox" name="ESSPSC3" onChange={() => setESSPSC3Value(!ESSPSC3Value)}></input>Spring</li>
+              <li><input type="checkbox" name="ESSPSC4" onChange={() => setESSPSC4Value(!ESSPSC4Value)}></input>Summer</li>
+              <li><input type="checkbox" name="ESSPSC5" onChange={() => setESSPSC5Value(!ESSPSC5Value)}></input>Other</li>
+              {ESSPSC5Value === true ?
+              <p>Insert Text Here:
+                <input
+                type="text"
+                name="startCollegeTimeOtherInput"
+                defaultValue=""
+                maxLength={25}
+                />
+              </p>:
+              <input type="hidden" name="startCollegeTimeOtherInput" value=""></input>}
+            </p>
           </ul>
         </p>
         <p>Eligible Student Seeker's Chosen Institution Program Must ...
