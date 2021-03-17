@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import { useFirestore } from 'react-redux-firebase';
+import infoIcon from './../img/informationIcon.png';
 
 // make sure to lock all inputs with patterns and titles before putting into production
+// later add pagination to this with a progress completion bar
 
 function ScholarshipForm(props) {
 
@@ -16,6 +18,12 @@ function ScholarshipForm(props) {
   const [ScholarshipDuration, setScholarshipDuration] = useState("1 Hour");
   const [ScholarshipAwardLimit, setScholarshipAwardLimit] = useState("1-60perHour");
   const [ScholarshipAwardLimitNumber, setScholarshipAwardLimitNumber] = useState(1);
+  const [RF1Value, setRF1Value] = useState(false);
+  const [RF2Value, setRF2Value] = useState(false);
+  const [RF3Value, setRF3Value] = useState(false);
+  const [RF4Value, setRF4Value] = useState(false);
+  const [RF5Value, setRF5Value] = useState(false);
+  const [RF6Value, setRF6Value] = useState(false);
   const [ER1Value, setER1Value] = useState(false);
   const [ER2Value, setER2Value] = useState(false);
   const [ER3Value, setER3Value] = useState(false);
@@ -145,7 +153,14 @@ function ScholarshipForm(props) {
         scholarshipAwardAuto: e.target.scholarshipAwardAuto.value,
       },
       scholarshipDuration: e.target.scholarshipDuration.value,
-      scholarshipKeyword: e.target.scholarshipKeyword.value,
+      relevantField: {
+        science: RF1Value,
+        technology: RF2Value,
+        reality: RF3Value,
+        entrepreneurship: RF4Value,
+        art: ER5Value,
+        math: ER6Value
+      },
       eligibilityRequirement: {
         minorityRep: ER1Value,
         currentGradeEnroll: ER2Value,
@@ -209,6 +224,12 @@ function ScholarshipForm(props) {
             <option value="TAG">TAG</option>
             <option value="PLANT">PLANT</option>
           </select>
+          <img
+            src={infoIcon}
+            className="tooltip"
+            alt="information icon"
+            title="Placement Types showcase the ways you can curate single, multiple...">
+          </img>
         </p>
         <p>Select Sustainable Development Goal:
           <select name="sustainableDevelopmentGoal" onChange={(event) => setSDGSelect(event.target.value)}>
@@ -368,7 +389,7 @@ function ScholarshipForm(props) {
         <p>Country:
           <input
           name='country'
-          defaultValue={props.country ? props.country : ''}
+          defaultValue='USA'
           required />
         </p>
         <p>State:
@@ -512,10 +533,10 @@ function ScholarshipForm(props) {
         </p>
         {PlacementType === "DROP" || PlacementType === "TAG" ?
         <div>
-        <p>Select Divisibility:
+        <p>How many awards should this fund?
           <select name="scholarshipAwardValueDivisiblity" onChange={(e) => setScholarshipAwardDivisibility(e.target.value)}>
-            <option value="divide">Divide Total Award Value by Number of Applicant Awarded</option>
-            <option value="each">Each Applicant is awarded Scholarship Award Value</option>
+            <option value="single">Single</option>
+            <option value="divided">Divided</option>
           </select>
         </p>
         <p>Select Duration for this Scholarship Opportunity:
@@ -573,14 +594,14 @@ function ScholarshipForm(props) {
         </p>
 
         <p>Select the appropriate field relevant to the purpose of your scholarship application:
-          <select name="scholarshipKeyword">
-            <option value="Science">Science</option>
-            <option value="Technology">Technology</option>
-            <option value="Reality">Reality</option>
-            <option value="Entrepreneurship">Entrepreneurship</option>
-            <option value="Art">Art</option>
-            <option value="Math">Math</option>
-          </select>
+          <ul>
+            <li><input type="checkbox" name="RF1" onChange={() => setRF1Value(!RF1Value)}></input>Science</li>
+            <li><input type="checkbox" name="RF2" onChange={() => setRF2Value(!RF2Value)}></input>Technology</li>
+            <li><input type="checkbox" name="RF3" onChange={() => setRF3Value(!RF3Value)}></input>Reality</li>
+            <li><input type="checkbox" name="RF4" onChange={() => setRF4Value(!RF4Value)}></input>Entreprenuership</li>
+            <li><input type="checkbox" name="RF5" onChange={() => setRF5Value(!RF5Value)}></input>Art</li>
+            <li><input type="checkbox" name="RF6" onChange={() => setRF6Value(!RF6Value)}></input>Math</li>
+          </ul>
         </p>
 
         <p>Select ONE or More Eligibility Requirements:
