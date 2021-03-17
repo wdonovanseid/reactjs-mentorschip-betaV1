@@ -44,7 +44,8 @@ function ScholarshipForm(props) {
   const [AQ5Value, setAQ5Value] = useState(false);
   const [AQ6Value, setAQ6Value] = useState(false);
   const [AQ7Value, setAQ7Value] = useState(false);
-  const [ESSPlan, setESSPlan] = useState("enroll");
+  const [ESP1Value, setESP1Value] = useState(false);
+  const [ESP2Value, setESP2Value] = useState(false);
   const [EnrollTime, setEnrollTime] = useState("fullTime");
   const [StartCollegeTime, setStartCollegeTime] = useState("fall");
   const [ESSChosenInstitute, setESSChosenInstitute] = useState("prove");
@@ -193,9 +194,10 @@ function ScholarshipForm(props) {
         otherInput: e.target.aq7Input.value,
       },
       eligibleStudentPlan: {
-        ESSPlan: e.target.ESSPlan.value,
+        enroll: ESP1Value,
         enrollTime: e.target.enrollTime.value,
         enrollTimeOtherInput: e.target.enrollTimeOtherInput.value,
+        startCollege: ESP2Value,
         startCollegeTime: e.target.startCollegeTime.value,
         startCollegeTimeOtherInput: e.target.startCollegeTimeOtherInput.value,
       },
@@ -593,7 +595,7 @@ function ScholarshipForm(props) {
           <b>{calculateTotal(PlacementType, ScholarshipAwardValue, ScholarshipAwardDivisibility, ScholarshipDuration, ScholarshipAwardLimit, ScholarshipAwardLimitNumber)}</b>
         </p>
 
-        <p>Select the appropriate field relevant to the purpose of your scholarship application:
+        <p>Select the appropriate field(s) relevant to the purpose of your scholarship application:
           <ul>
             <li><input type="checkbox" name="RF1" onChange={() => setRF1Value(!RF1Value)}></input>Science</li>
             <li><input type="checkbox" name="RF2" onChange={() => setRF2Value(!RF2Value)}></input>Technology</li>
@@ -618,35 +620,41 @@ function ScholarshipForm(props) {
             <li><input type="checkbox" name="ER3" onChange={() => setER3Value(!ER3Value)}></input>GPA</li>
             {ER3Value === true ?
             <div>
+              <p>Select Range:
               <select name="er3Select" onChange={(e) => setER3SelectValue(e.target.value)}>
                 <option value={4}>0-4</option>
                 <option value={5}>0-5</option>
                 <option value={10}>0-10</option>
               </select>
-            <input
-            type="number"
-            name="er3Input"
-            defaultValue={0}
-            min={0.0}
-            max={ER3SelectValue}
-            step={0.1}
-            />
-            {/* later change this to a slider input */}
+              </p>
+              <p>Input GPA Requirement:
+                <input
+                type="number"
+                name="er3Input"
+                defaultValue={0}
+                min={0.0}
+                max={ER3SelectValue}
+                step={0.1}
+                />
+              {/* later change this to a slider input */}
+              </p>
             </div>:
             <div>
-            <input type="hidden" name="er3Select" value=""></input>
-            <input type="hidden" name="er3Input" value={0}></input>
+              <input type="hidden" name="er3Select" value=""></input>
+              <input type="hidden" name="er3Input" value={0}></input>
             </div>}
             <li><input type="checkbox" name="ER4" onChange={() => setER4Value(!ER4Value)}></input>U.S. Citizen</li>
             <li><input type="checkbox" name="ER5" onChange={() => setER5Value(!ER5Value)}></input>Pell Grant Eligible / Significant Unmet Financial Need</li>
             <li><input type="checkbox" name="ER6" onChange={() => setER6Value(!ER6Value)}></input>Other</li>
             {ER6Value === true ?
-            <input
-            type="text"
-            name="er6Input"
-            defaultValue=""
-            maxLength={25}
-            />:
+            <p>Insert Text Here:
+              <input
+              type="text"
+              name="er6Input"
+              defaultValue=""
+              maxLength={25}
+              />
+            </p>:
             <input type="hidden" name="er6Input" value=""></input>}
           </ul>
         </p>
@@ -659,12 +667,14 @@ function ScholarshipForm(props) {
             <li><input type="checkbox" name="IR5" onChange={() => setIR5Value(!IR5Value)}></input>3+ Misdemeanors</li>
             <li><input type="checkbox" name="IR6" onChange={() => setIR6Value(!IR6Value)}></input>Other</li>
             {IR6Value === true ?
-            <input
-            type="text"
-            name="ir6Input"
-            defaultValue=""
-            maxLength={25}
-            />:
+            <p>Insert Text Here:
+              <input
+              type="text"
+              name="ir6Input"
+              defaultValue=""
+              maxLength={25}
+              />
+            </p>:
             <input type="hidden" name="ir6Input" value=""></input>}
           </ul>
         </p>
@@ -678,22 +688,21 @@ function ScholarshipForm(props) {
             <li><input type="checkbox" name="AQ6" onChange={() => setAQ6Value(!AQ6Value)}></input>Volunteer Service</li>
             <li><input type="checkbox" name="AQ7" onChange={() => setAQ7Value(!AQ7Value)}></input>Other</li>
             {AQ7Value === true ?
-            <input
-            type="text"
-            name="aq7Input"
-            defaultValue=""
-            maxLength={25}
-            />:
+            <p>Insert Text Here:
+              <input
+              type="text"
+              name="aq7Input"
+              defaultValue=""
+              maxLength={25}
+              />
+            </p>:
             <input type="hidden" name="aq7Input" value=""></input>}
           </ul>
         </p>
         <p>Eligible Student Seekers Must Plan to ...
           <ul>
-            <select name="ESSPlan" onChange={e => setESSPlan(e.target.value)}>
-              <option value="enroll">Enroll</option>
-              <option value="startCollege">Start College</option>
-            </select>
-            {ESSPlan === "enroll" ?
+            <li><input type="checkbox" name="ESP1" onChange={() => setESP1Value(!ESP1Value)}></input>Enroll</li>
+            {ESP1Value === true?
             <select name="enrollTime" onChange={e => setEnrollTime(e.target.value)}>
               <option value="fullTime">Full Time</option>
               <option value="partTime">Part Time</option>
@@ -702,15 +711,18 @@ function ScholarshipForm(props) {
               <option value="other">Other</option>
             </select>:
             <input type="hidden" name="enrollTime" value=""></input>}
-            {ESSPlan === "enroll" && EnrollTime === "other" ?
-            <input
-            type="text"
-            name="enrollTimeOtherInput"
-            defaultValue=""
-            maxLength={25}
-            />:
+            {ESP1Value === true && EnrollTime === "other" ?
+            <p>Insert Text Here:
+              <input
+              type="text"
+              name="enrollTimeOtherInput"
+              defaultValue=""
+              maxLength={25}
+              />
+            </p>:
             <input type="hidden" name="enrollTimeOtherInput" value=""></input>}
-            {ESSPlan === "startCollege" ?
+            <li><input type="checkbox" name="ESP2" onChange={() => setESP2Value(!ESP2Value)}></input>Start Colleget</li>
+            {ESP2Value === true ?
             <select name="startCollegeTime" onChange={e => setStartCollegeTime(e.target.value)}>
               <option value="fall">Fall</option>
               <option value="winter">Winter</option>
@@ -719,13 +731,15 @@ function ScholarshipForm(props) {
               <option value="other">Other</option>
             </select>:
             <input type="hidden" name="startCollegeTime" value=""></input>}
-            {ESSPlan === "startCollege" && StartCollegeTime === "other" ?
-            <input
-            type="text"
-            name="startCollegeTimeOtherInput"
-            defaultValue=""
-            maxLength={25}
-            />:
+            {ESP2Value === true && StartCollegeTime === "other" ?
+            <p>Insert Text Here:
+              <input
+              type="text"
+              name="startCollegeTimeOtherInput"
+              defaultValue=""
+              maxLength={25}
+              />
+            </p>:
             <input type="hidden" name="startCollegeTimeOtherInput" value=""></input>}
           </ul>
         </p>
