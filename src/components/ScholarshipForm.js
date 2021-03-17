@@ -54,10 +54,18 @@ function ScholarshipForm(props) {
   const [ESSPSC3Value, setESSPSC3Value] = useState(false);
   const [ESSPSC4Value, setESSPSC4Value] = useState(false);
   const [ESSPSC5Value, setESSPSC5Value] = useState(false);
-  const [ESSChosenInstitute, setESSChosenInstitute] = useState("prove");
-  const [ProveValue, setProveValue] = useState("accreditation");
-  const [ProvideValue, setProvideValue] = useState("certificateOfCompletion");
-  const [CompleteValue, setCompleteValue] = useState("18months");
+  const [ESSCIProvide1Value, setESSCIProvide1Value] = useState(false);
+  const [ESSCIProvide2Value, setESSCIProvide2Value] = useState(false);
+  const [ESSCIProvide3Value, setESSCIProvide3Value] = useState(false);
+  const [ESSCIProvide4Value, setESSCIProvide4Value] = useState(false);
+  const [ESSCIProvide5Value, setESSCIProvide5Value] = useState(false);
+  const [ESSCIProvide6Value, setESSCIProvide6Value] = useState(false);
+  const [ESSCIProvide7Value, setESSCIProvide7Value] = useState(false);
+  const [ESSCIGraduate1Value, setESSCIGraduate1Value] = useState(false);
+  const [ESSCIGraduate2Value, setESSCIGraduate2Value] = useState(false);
+  const [ESSCIGraduate3Value, setESSCIGraduate3Value] = useState(false);
+  const [ESSCIGraduate4Value, setESSCIGraduate4Value] = useState(false);
+  const [ESSCIGraduate5Value, setESSCIGraduate5Value] = useState(false);
 
   const firestore = useFirestore();
 
@@ -218,13 +226,24 @@ function ScholarshipForm(props) {
         },
       },
       eligibleStudentChosenInstituteProgram: {
-        essChosenInstitute: e.target.ESSChosenInstitute.value,
-        proveCreditation: e.target.proveCreditation.value,
-        proveCreditationOtherInput: e.target.proveCreditationOtherInput.value,
-        provideDegree: e.target.provideDegree.value,
-        provideDegreeOtherInput: e.target.provideDegreeOtherInput.value,
-        completeTime: e.target.completeTime.value,
-        completeTimeOtherInput: e.target.completeTimeOtherInput.value,
+        prove: e.target.ESSCIPProve.value,
+        provide: {
+          certOfCompletion: ESSCIProvide1Value,
+          profCert: ESSCIProvide2Value,
+          associate: ESSCIProvide3Value,
+          bachelors: ESSCIProvide4Value,
+          masters: ESSCIProvide5Value,
+          doctorate: ESSCIProvide6Value,
+          other: ESSCIProvide7Value,
+          proveCreditationOtherInput: e.target.proveCreditationOtherInput.value,
+        },
+        graduate: {
+          eightteenMonths: ESSCIGraduate1Value,
+          twoYear: ESSCIGraduate2Value,
+          fourYear: ESSCIGraduate3Value,
+          sixYear: ESSCIGraduate4Value,
+          eightPlusYear: ESSCIGraduate5Value
+        }        
       },
       createdAt: firestore.FieldValue.serverTimestamp()
     });
@@ -755,64 +774,36 @@ function ScholarshipForm(props) {
         </p>
         <p>Eligible Student Seeker's Chosen Institution Program Must ...
           <ul>
-            <select name="ESSChosenInstitute" onChange={e => setESSChosenInstitute(e.target.value)}>
-              <option value="prove">Prove</option>
-              <option value="provide">Provide</option>
-              <option value="complete">Complete</option>
-            </select>
-            {ESSChosenInstitute === "prove" ?
-            <select name="proveCreditation" onChange={e => setProveValue(e.target.value)}>
-              <option value="accreditation">Accreditation</option>
-              <option value="non-accreditation">Non-Accreditation</option>
-              <option value="other">Other</option>
-            </select>:
-            <input type="hidden" name="proveCreditation" value=""></input>}
-            {ESSChosenInstitute === "prove" && ProveValue === "other" ?
-            <input
-            type="text"
-            name="proveCreditationOtherInput"
-            defaultValue=""
-            maxLength={25}
-            />:
-            <input type="hidden" name="proveCreditationOtherInput" value=""></input>}
-            {ESSChosenInstitute === "provide" ?
-            <select name="provideDegree" onChange={e => setProvideValue(e.target.value)}>
-              <option value="certificateOfCompletion">Certificate Of Completion</option>
-              <option value="professionalCertification">Professional Certification</option>
-              <option value="associatesDegree">Associates Degree</option>
-              <option value="bachelorsDegree">Bachelor's Degree</option>
-              <option value="mastersDegree">Master's Degree</option>
-              <option value="doctorateDegree">Doctorate Degree (PhD, EdD, MD, JD, etc)</option>
-              <option value="other">Other</option>
-            </select>:
-            <input type="hidden" name="provideDegree" value=""></input>}
-            {ESSChosenInstitute === "provide" && ProvideValue === "other" ?
-            <input
-            type="text"
-            name="provideDegreeOtherInput"
-            defaultValue=""
-            maxLength={25}
-            />:
-            <input type="hidden" name="provideDegreeOtherInput" value=""></input>}
-            {ESSChosenInstitute === "complete" ?
-            <select name="completeTime" onChange={e => setCompleteValue(e.target.value)}>
-              <option value="18months">Accelerated 18 months</option>
-              <option value="2years">2 Years</option>
-              <option value="4years">4 Years</option>
-              <option value="5years">5 Years</option>
-              <option value="6years">6 Years</option>
-              <option value="8+years">8+ Years</option>
-              <option value="other">Other</option>
-            </select>:
-            <input type="hidden" name="completeTime" value=""></input>}
-            {ESSChosenInstitute === "complete" && CompleteValue === "other" ?
-            <input
-            type="text"
-            name="completeTimeOtherInput"
-            defaultValue=""
-            maxLength={25}
-            />:
-            <input type="hidden" name="completeTimeOtherInput" value=""></input>}
+            <p>Prove
+              <li><input type="radio" name="ESSCIPProve" value="accreditation" defaultChecked></input>Accreditation</li>
+              <li><input type="radio" name="ESSCIPProve" value="non-accreditation"></input>Non-Accreditation</li>
+            </p>
+            <p>Provide
+              <li><input type="checkbox" name="ESSCIProvide1" onChange={() => setESSCIProvide1Value(!ESSCIProvide1Value)}></input>Provide Certificate of Completion</li>
+              <li><input type="checkbox" name="ESSCIProvide2" onChange={() => setESSCIProvide2Value(!ESSCIProvide2Value)}></input>Professional Certification</li>
+              <li><input type="checkbox" name="ESSCIProvide3" onChange={() => setESSCIProvide3Value(!ESSCIProvide3Value)}></input>Associate</li>
+              <li><input type="checkbox" name="ESSCIProvide4" onChange={() => setESSCIProvide4Value(!ESSCIProvide4Value)}></input>Bachelors</li>
+              <li><input type="checkbox" name="ESSCIProvide5" onChange={() => setESSCIProvide5Value(!ESSCIProvide5Value)}></input>Masters</li>
+              <li><input type="checkbox" name="ESSCIProvide6" onChange={() => setESSCIProvide6Value(!ESSCIProvide6Value)}></input>Doctorate</li>
+              <li><input type="checkbox" name="ESSCIProvide7" onChange={() => setESSCIProvide7Value(!ESSCIProvide7Value)}></input>Other</li>
+              {ESSCIProvide7Value === true ?
+              <p>Insert Text Here:
+                <input
+                type="text"
+                name="proveCreditationOtherInput"
+                defaultValue=""
+                maxLength={25}
+                />
+              </p>:
+              <input type="hidden" name="proveCreditationOtherInput" value=""></input>}
+            </p>
+            <p>Graduate
+              <li><input type="checkbox" name="ESSCIGraduate1" onChange={() => setESSCIGraduate1Value(!ESSCIGraduate1Value)}></input>18 Months Curriculum</li>
+              <li><input type="checkbox" name="ESSCIGraduate2" onChange={() => setESSCIGraduate2Value(!ESSCIGraduate2Value)}></input>2 Year Curriculum</li>
+              <li><input type="checkbox" name="ESSCIGraduate3" onChange={() => setESSCIGraduate3Value(!ESSCIGraduate3Value)}></input>4 Year Curriculum</li>
+              <li><input type="checkbox" name="ESSCIGraduate4" onChange={() => setESSCIGraduate4Value(!ESSCIGraduate4Value)}></input>6 Year Curriculum</li>
+              <li><input type="checkbox" name="ESSCIGraduate5" onChange={() => setESSCIGraduate5Value(!ESSCIGraduate5Value)}></input>8+ Year Curriculum</li>
+            </p>
           </ul>
         </p>
         
