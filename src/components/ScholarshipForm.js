@@ -1,11 +1,14 @@
 import React, {useState} from "react";
 import { useFirestore } from 'react-redux-firebase';
 import infoIcon from './../img/informationIcon.png';
+import Modal from 'react-bootstrap/Modal';
 
 // make sure to lock all inputs with patterns and titles before putting into production
 // later add pagination to this with a progress completion bar
 
 function ScholarshipForm(props) {
+
+  const [info1Show, setInfo1Show] = useState(false);
 
   const [PlacementType, setPlacementType] = useState("DROP");
   const [SDGSelect, setSDGSelect] = useState("NoPoverty");
@@ -173,8 +176,8 @@ function ScholarshipForm(props) {
         technology: RF2Value,
         reality: RF3Value,
         entrepreneurship: RF4Value,
-        art: ER5Value,
-        math: ER6Value
+        art: RF5Value,
+        math: RF6Value
       },
       eligibilityRequirement: {
         minorityRep: ER1Value,
@@ -261,12 +264,27 @@ function ScholarshipForm(props) {
             <option value="TAG">TAG</option>
             <option value="PLANT">PLANT</option>
           </select>
-          <img
-            src={infoIcon}
-            className="tooltip"
-            alt="information icon"
-            title="Placement Types showcase the ways you can curate single, multiple...">
-          </img>
+          <input
+          type="image"
+          src={infoIcon}
+          alt="information icon"
+          width="14"
+          height="14"
+          onClick={() => setInfo1Show(true)}
+          />
+          <Modal
+            size="sm"
+            show={info1Show}
+            onHide={() => setInfo1Show(false)}
+            aria-labelledby="example-modal-sizes-title-sm"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="example-modal-sizes-title-sm">
+                Small Modal
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>"Placement Types showcase the ways you can curate single, multiple or repeating micro-scholarship award opportunities in your designated community." </Modal.Body>
+          </Modal>
         </p>
         <p>Select Sustainable Development Goal:
           <select name="sustainableDevelopmentGoal" onChange={(event) => setSDGSelect(event.target.value)}>
